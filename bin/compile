@@ -15,8 +15,9 @@ mkdir -p $VENDOR_DIR
 mkdir -p $(dirname $PROFILE_PATH)
 
 echo "-----> Fetching and vendoring p7zip"
-echo "       Using p7zip version: 9.20.1"
-curl "https://s3.amazonaws.com/opendoor-deps/p7zip_9.20.1.tar.gz" -s -o - | tar xzf - -C "$VENDOR_DIR"
-mv "$VENDOR_DIR/p7zip_9.20.1" "$VENDOR_DIR/p7zip"
+LATEST_VERSION=$(curl -s https://api.github.com/repos/jinfeihan57/p7zip/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+echo "       Using p7zip version: $LATEST_VERSION"
+curl "https://github.com/jinfeihan57/p7zip/releases/download/$LATEST_VERSION/p7zip_$LATEST_VERSION.tar.gz" -s -o - | tar xzf - -C "$VENDOR_DIR"
+mv "$VENDOR_DIR/p7zip_$LATEST_VERSION" "$VENDOR_DIR/p7zip"
 
 echo "export PATH=\$PATH:/app/vendor/p7zip/bin" >> $PROFILE_PATH
